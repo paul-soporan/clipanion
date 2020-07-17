@@ -1,7 +1,7 @@
 import {Readable, Writable}                from 'stream';
 
 import {HELP_COMMAND_INDEX}                from '../constants';
-import {CliBuilder}                        from '../core';
+import {CliBuilder, CompletionTree}                        from '../core';
 import {formatMarkdownish, ColorFormat, richFormat, textFormat}                 from '../format';
 
 import {CommandClass, Command, Definition} from './Command';
@@ -78,6 +78,11 @@ export type MiniCli<Context extends BaseContext> = CliOptions & {
      * Returns an Array representing the definitions of all registered commands.
      */
     definitions(): Definition[];
+
+    /**
+     * Returns the completion tree of the `Cli`.
+     */
+    completionTree(): CompletionTree;
 
     /**
      * Formats errors using colors.
@@ -194,6 +199,10 @@ export class Cli<Context extends BaseContext = BaseContext> implements MiniCli<C
         });
     }
 
+    completionTree(): CompletionTree {
+        return this.builder.completionTree();
+    }
+
     process(input: string[]) {
         const {contexts, process} = this.builder.compile();
         const state = process(input);
@@ -244,6 +253,7 @@ export class Cli<Context extends BaseContext = BaseContext> implements MiniCli<C
             binaryVersion: this.binaryVersion,
             enableColors: this.enableColors,
             definitions: () => this.definitions(),
+            completionTree: () => this.completionTree(),
             error: (error, opts) => this.error(error, opts),
             process: input => this.process(input),
             run: (input, subContext?) => this.run(input, {...context, ...subContext}),

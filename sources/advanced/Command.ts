@@ -2,6 +2,8 @@ import {CommandBuilder, RunState}         from '../core';
 
 import {BaseContext, CliContext, MiniCli} from './Cli';
 
+import type {CompletionServiceCommand} from './entries/completion-service';
+import type {CompletionSetupCommand} from './entries/completion-setup';
 import type {HelpCommand} from './entries/help';
 import type {VersionCommand} from './entries/version';
 
@@ -379,16 +381,36 @@ export abstract class Command<Context extends BaseContext = BaseContext> {
      */
     static Entries: {
         /**
+         * A command that manages completion requests from the shell.
+         *
+         * Paths: []
+         *
+         * Arguments: This command accepts arguments starting with `--comp`.
+         */
+        CompletionService: typeof CompletionServiceCommand;
+
+        /**
+         * A command that sets up and cleans up the completion files.
+         *
+         * Paths: [`completion`]
+         *
+         * Arguments:
+         * - `[--setup #0]`, where `#0` is an optional file path defaulting to the configuration file of the detected shell.
+         * - `[--cleanup #0]`, where `#0` is an optional file path defaulting to the configuration file of the detected shell.
+         */
+        CompletionSetup: typeof CompletionSetupCommand;
+
+        /**
          * A command that prints the usage of all commands.
          *
-         * Paths: `-h`, `--help`
+         * Paths: [`-h`, `--help`]
          */
         Help: typeof HelpCommand;
 
         /**
          * A command that prints the version of the binary (`cli.binaryVersion`).
          *
-         * Paths: `-v`, `--version`
+         * Paths: [`-v`, `--version`]
          */
         Version: typeof VersionCommand;
     } = {} as any;

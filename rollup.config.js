@@ -1,4 +1,4 @@
-import ts from "@wessberg/rollup-plugin-ts";
+import ts from '@wessberg/rollup-plugin-ts';
 
 export default {
   input: './sources/advanced/index.ts',
@@ -12,6 +12,7 @@ export default {
       format: 'cjs'
     },
   ],
+  external: ['lodash/merge', 'omelette'],
   plugins: [
     ts({
       tsconfig: 'tsconfig.dist.json'

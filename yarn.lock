@@ -1183,6 +1183,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash@npm:^4.14.155":
+  version: 4.14.155
+  resolution: "@types/lodash@npm:4.14.155"
+  checksum: 3/e3fa52de94757a765761b3b5f0e483aa61de985b75f7d4a55e6f6b79c31b7cbba0e2e91eec14b38fe66b82f5cd79dd83a54069a0e5491a1c7126e01b143a0a29
+  languageName: node
+  linkType: hard
+
 "@types/mocha@npm:^7.0.2":
   version: 7.0.2
   resolution: "@types/mocha@npm:7.0.2"
@@ -1201,6 +1208,13 @@ __metadata:
   version: 0.11.0
   resolution: "@types/object-path@npm:0.11.0"
   checksum: 3/7b101b447fde1846ae2c489e801fae55f2bdbf9d67d99de758c7ea73c0c5e91b924d3f6a4ae2ab1a5c70145f34fe5729b964bad5d08d1939003c516abcbcbf2b
+  languageName: node
+  linkType: hard
+
+"@types/omelette@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@types/omelette@npm:0.4.0"
+  checksum: 3/bb718f1bc43b47438b334a8d54a45208254b2ea64069c160569f720df6a8cb2c3d162d4c2fbf29e3904cd4e0558a0efcaf35845359b6c253afd37db8f01b4ee9
   languageName: node
   linkType: hard
 
@@ -1641,19 +1655,28 @@ __metadata:
   dependencies:
     "@types/chai": ^4.2.11
     "@types/chai-as-promised": ^7.1.2
+    "@types/lodash": ^4.14.155
     "@types/mocha": ^7.0.2
     "@types/node": ^14.0.13
+    "@types/omelette": ^0.4.0
     "@types/yup": ^0.29.3
     "@wessberg/rollup-plugin-ts": ^1.2.25
     chai: ^4.2.0
     chai-as-promised: ^7.1.1
     get-stream: ^5.1.0
+    lodash: ^4.17.15
     mocha: ^8.0.1
+    omelette: ^0.4.12
     rollup: ^2.16.1
     ts-node: ^8.10.2
     tslib: ^2.0.0
     typescript: ^3.9.5
     yup: ^0.29.1
+  peerDependencies:
+    omelette: "*"
+  peerDependenciesMeta:
+    omelette:
+      optional: true
   languageName: unknown
   linkType: soft
 
@@ -2869,6 +2892,13 @@ fsevents@~2.1.2:
     has-symbols: ^1.0.0
     object-keys: ^1.0.11
   checksum: 3/92e20891ddf04d9974f7b178ae70d198727dcd638c8a5a422f07f730f40140c4fe02451cdc9c37e9f22392e5487b9162975003a9f20b16a87b9d13fe150cf62d
+  languageName: node
+  linkType: hard
+
+"omelette@npm:^0.4.12":
+  version: 0.4.12
+  resolution: "omelette@npm:0.4.12"
+  checksum: 3/2f3c2d747b3b6cf8cf59b240715ad84fef7e22199996b64c9c498e118e77f517031f703e0a119ea7e69f4bdf0c0c2487b260c4c49b3c2891eebedd5f034316eb
   languageName: node
   linkType: hard
 

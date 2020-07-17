@@ -1,3 +1,5 @@
+import merge from 'lodash/merge';
+
 import * as errors from './errors';
 import {
     BATCH_REGEX, BINDING_REGEX, END_OF_INPUT,
@@ -17,6 +19,8 @@ export function debug(str: string) {
 }
 
 // ------------------------------------------------------------------------
+
+export type CompletionTree = {[key: string]: CompletionTree};
 
 export type StateMachine = {
     nodes: Node[];
@@ -722,6 +726,17 @@ export class CommandBuilder<Context> {
         return segments.join(` `);
     }
 
+    completionTree(): CompletionTree {
+        return this.paths.reduce((commandCompletionTree: CompletionTree, path: string[]) => {
+            const pathCompletionTree: CompletionTree = {};
+            path.reduce((node: CompletionTree, segment: string) => {
+                return node[segment] = {};
+            }, pathCompletionTree)
+
+            return merge(commandCompletionTree, pathCompletionTree);
+        }, {});
+    }
+
     compile() {
         if (typeof this.context === `undefined`)
             throw new Error(`Assertion failed: No context attached`);
@@ -913,6 +928,12 @@ export class CliBuilder<Context> {
         this.builders.push(builder);
 
         return builder;
+    }
+
+    completionTree(): CompletionTree {
+        return this.builders.reduce((cliCompletionTree: CompletionTree, builder) => {
+            return merge(cliCompletionTree, builder.completionTree());
+        }, {});
     }
 
     compile() {
