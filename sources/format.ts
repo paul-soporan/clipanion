@@ -16,6 +16,10 @@ export const textFormat: ColorFormat = {
     code: str => str,
 };
 
+export function makeParagraphSplitterRegExp(maxSegmentLength: number) {
+    return new RegExp(`(.{1,${maxSegmentLength}})(?: |$)`, `g`);
+}
+
 export function formatMarkdownish(text: string, {format, paragraphs}: {format: ColorFormat, paragraphs: boolean}) {
     // Enforce \n as newline character
     text = text.replace(/\r\n?/g, `\n`);
@@ -39,10 +43,10 @@ export function formatMarkdownish(text: string, {format, paragraphs}: {format: C
 
             if (!bulletMatch)
                 // No, cut the paragraphs into segments of 80 characters
-                return paragraph.match(/(.{1,80})(?: |$)/g)!.join('\n');
+                return paragraph.match(makeParagraphSplitterRegExp(80))!.join('\n');
 
             // Yes, cut the paragraphs into segments of 78 characters (to account for the prefix)
-            return bulletMatch[1].match(/(.{1,78})(?: |$)/g)!.map((line, index) => {
+            return bulletMatch[1].match(makeParagraphSplitterRegExp(78))!.map((line, index) => {
                 return (index === 0 ? `- ` : `  `) + line;
             }).join(`\n`);
         }).join(`\n\n`);

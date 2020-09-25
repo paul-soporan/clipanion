@@ -2,7 +2,7 @@ import {Readable, Writable}                from 'stream';
 
 import {HELP_COMMAND_INDEX}                from '../constants';
 import {CliBuilder}                        from '../core';
-import {formatMarkdownish, ColorFormat, richFormat, textFormat}                 from '../format';
+import {formatMarkdownish, ColorFormat, richFormat, textFormat, makeParagraphSplitterRegExp}                 from '../format';
 
 import {CommandClass, Command, Definition} from './Command';
 import {HelpCommand}                       from './HelpCommand';
@@ -427,7 +427,24 @@ export class Cli<Context extends BaseContext = BaseContext> implements MiniCli<C
                     result += `\n`;
 
                     for (const {definition, description} of options) {
-                        result += `  ${definition.padEnd(maxDefinitionLength)}    ${formatMarkdownish(description, {format: this.format(colored), paragraphs: false})}`;
+                        const spacesBeforeDefinition = ` `.repeat(2);
+                        const spacesAfterDefinition = ` `.repeat(4);
+
+                        const spaceCountBeforeDescription = spacesBeforeDefinition.length + maxDefinitionLength + spacesAfterDefinition.length;
+                        const maxDescriptionLength = process.stdout.columns - spaceCountBeforeDescription;
+
+                        const formattedDescription = formatMarkdownish(description, {format: this.format(colored), paragraphs: false});
+                        const paragraphSplitter = makeParagraphSplitterRegExp(maxDescriptionLength);
+                        const paragraphs = formattedDescription.match(paragraphSplitter);
+                        if (paragraphs === null)
+                            throw new Error(`Assertion failed: No paragraphs found.`);
+
+                        const [firstParagraph, ...remainingParagraphs] = paragraphs;
+
+                        result += `${spacesBeforeDefinition}${definition.padEnd(maxDefinitionLength)}${spacesAfterDefinition}${firstParagraph}\n`;
+                        for (const paragraph of remainingParagraphs) {
+                            result += `${` `.repeat(spaceCountBeforeDescription)}${paragraph}\n`;
+                        }
                     }
                 }
 
