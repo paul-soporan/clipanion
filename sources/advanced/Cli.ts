@@ -427,24 +427,36 @@ export class Cli<Context extends BaseContext = BaseContext> implements MiniCli<C
                     result += `\n`;
 
                     for (const {definition, description} of options) {
-                        const spacesBeforeDefinition = ` `.repeat(2);
-                        const spacesAfterDefinition = ` `.repeat(4);
-
-                        const spaceCountBeforeDescription = spacesBeforeDefinition.length + maxDefinitionLength + spacesAfterDefinition.length;
-                        const maxDescriptionLength = process.stdout.columns - spaceCountBeforeDescription;
+                        result += `  ${definition.padEnd(maxDefinitionLength)}\n`;
 
                         const formattedDescription = formatMarkdownish(description, {format: this.format(colored), paragraphs: false});
-                        const paragraphSplitter = makeParagraphSplitterRegExp(maxDescriptionLength);
+                        const paragraphSplitter = makeParagraphSplitterRegExp(process.stdout.columns - 6);
                         const paragraphs = formattedDescription.match(paragraphSplitter);
                         if (paragraphs === null)
                             throw new Error(`Assertion failed: No paragraphs found.`);
 
-                        const [firstParagraph, ...remainingParagraphs] = paragraphs;
-
-                        result += `${spacesBeforeDefinition}${definition.padEnd(maxDefinitionLength)}${spacesAfterDefinition}${firstParagraph}\n`;
-                        for (const paragraph of remainingParagraphs) {
-                            result += `${` `.repeat(spaceCountBeforeDescription)}${paragraph}\n`;
+                        for (const paragraph of paragraphs) {
+                            result += `      ${paragraph}\n`;
                         }
+
+                        // const spacesBeforeDefinition = ` `.repeat(2);
+                        // const spacesAfterDefinition = ` `.repeat(4);
+
+                        // const spaceCountBeforeDescription = spacesBeforeDefinition.length + maxDefinitionLength + spacesAfterDefinition.length;
+                        // const maxDescriptionLength = process.stdout.columns - spaceCountBeforeDescription;
+
+                        // const formattedDescription = formatMarkdownish(description, {format: this.format(colored), paragraphs: false});
+                        // const paragraphSplitter = makeParagraphSplitterRegExp(maxDescriptionLength);
+                        // const paragraphs = formattedDescription.match(paragraphSplitter);
+                        // if (paragraphs === null)
+                        //     throw new Error(`Assertion failed: No paragraphs found.`);
+
+                        // const [firstParagraph, ...remainingParagraphs] = paragraphs;
+
+                        // result += `${spacesBeforeDefinition}${definition.padEnd(maxDefinitionLength)}${spacesAfterDefinition}${firstParagraph}\n`;
+                        // for (const paragraph of remainingParagraphs) {
+                        //     result += `${` `.repeat(spaceCountBeforeDescription)}${paragraph}\n`;
+                        // }
                     }
                 }
 
